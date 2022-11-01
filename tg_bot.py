@@ -20,22 +20,24 @@ hh_keys = hh.read_keys_in_db()
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.from_user.id, "Здравствуй " + message.from_user.username + " !")
+    bot.send_message(message.from_user.id, "Здравствуй " + str(message.from_user.username) + " !")
 
 @bot.message_handler(commands=['hh'])
 def hh_query(message):
     key = message.text.replace('/hh', '').replace(' ', '')
+    result = ''
     if key:
         hh_urls = hh.getUrls(search=key)
         hh_urls = hh_urls['urls']
         url = sample(hh_urls, 1)
         vacancy = hh.read_url(url[0])
-        result = ''
+
         for key, val in vacancy.items():
             if key != 'key_skills' and key != 'info':
                 result += f'{key}: {val} \n'
-
-    bot.send_message(message.from_user.id, result)
+        bot.send_message(message.from_user.id, result)
+    else:
+        bot.send_message(message.from_user.id, '/hh ключ- Поиск вакансий по ключу с HH (ключ - обязательный параметр')
 
 
 
